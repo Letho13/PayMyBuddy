@@ -15,16 +15,12 @@ public class UserService {
 
     private final UserRepository userRepository;
 
-    public List<User> findAllUsers() {
-        List<User> users = new ArrayList<>();
-        userRepository.findAll()
-                .forEach(users::add);
-        return users;
+    public List<User> findAll() {
+        return userRepository.findAll();
     }
 
-    public User getUser(Integer id) {
-        return userRepository.findById(id)
-                .orElse(null);
+    public User findUserByEmail(String email){
+        return userRepository.findUsersByEmail(email);
     }
 
     public void addUser(User user){
