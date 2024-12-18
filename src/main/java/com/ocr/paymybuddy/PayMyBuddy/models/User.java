@@ -1,4 +1,4 @@
-package com.ocr.paymybuddy.PayMyBuddy.model;
+package com.ocr.paymybuddy.PayMyBuddy.models;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -27,9 +27,10 @@ public class User {
     private String password;
 
     @OneToOne
+    @JoinColumn(name="bankAccount_id")
     private BankAccount bankAccount;
 
-    @OneToMany
+    @OneToMany(mappedBy="user")
     private List<UserConnection> connections;
 
 

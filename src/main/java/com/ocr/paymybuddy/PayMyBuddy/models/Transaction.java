@@ -1,4 +1,4 @@
-package com.ocr.paymybuddy.PayMyBuddy.model;
+package com.ocr.paymybuddy.PayMyBuddy.models;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -19,6 +19,7 @@ public class Transaction {
     private String description;
 
     @ManyToOne
+    @JoinColumn(name = "bankAccount_id")
     private BankAccount bankAccount;
 
 }

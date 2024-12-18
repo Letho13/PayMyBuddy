@@ -1,8 +1,7 @@
-package com.ocr.paymybuddy.PayMyBuddy.service;
+package com.ocr.paymybuddy.PayMyBuddy.services;
 
-import com.ocr.paymybuddy.PayMyBuddy.model.User;
-import com.ocr.paymybuddy.PayMyBuddy.repository.UserRepository;
-import jakarta.persistence.Id;
+import com.ocr.paymybuddy.PayMyBuddy.models.User;
+import com.ocr.paymybuddy.PayMyBuddy.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

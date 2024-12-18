@@ -1,4 +1,4 @@
-package com.ocr.paymybuddy.PayMyBuddy.model;
+package com.ocr.paymybuddy.PayMyBuddy.models;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -16,4 +16,9 @@ public class UserConnection {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String username;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
 }
