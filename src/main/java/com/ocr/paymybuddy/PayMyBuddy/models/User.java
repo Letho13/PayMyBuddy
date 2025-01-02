@@ -27,12 +27,13 @@ public class User {
 
     private String password;
 
+    private String role;
+
     @OneToOne
     @JoinColumn(name="bankAccount_id")
     private BankAccount bankAccount;
 
     @OneToMany(mappedBy="user")
     private List<UserConnection> connections;
-
 
 }

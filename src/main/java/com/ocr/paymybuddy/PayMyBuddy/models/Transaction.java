@@ -5,6 +5,7 @@ import lombok.*;
 
 @Data
 @Entity
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "transaction")
@@ -21,5 +22,6 @@ public class Transaction {
     @ManyToOne
     @JoinColumn(name = "bankAccount_id")
     private BankAccount bankAccount;
+
 
 }

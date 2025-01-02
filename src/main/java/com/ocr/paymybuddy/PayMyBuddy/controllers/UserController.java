@@ -5,11 +5,10 @@ import com.ocr.paymybuddy.PayMyBuddy.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequiredArgsConstructor
@@ -18,18 +17,18 @@ public class UserController {
 
     private final UserService userService;
 
-    @GetMapping("/users")
-    public String findAllUsers (Model model) {
-        List<User> users = userService.findAll();
-        model.addAttribute("users", users);
-        return "user-list";
-    }
 
     @GetMapping("/users/{email}")
     public String findUserByEmail (@PathVariable String email, Model model) {
-        User user = userService.findUserByEmail(email);
-        model.addAttribute("users",List.of(user));
-        return "user-list";
+        Optional<User> user = userService.findUserByEmail(email);
+        model.addAttribute("users",user);
+        return "user_page";
     }
 
+    @PostMapping("/user")
+    public String addUser (@RequestBody User user, Model model) {
+        userService.addUser(user);
+        model.addAttribute("user");
+        return "user_confirmation";
+    }
 }

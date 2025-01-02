@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User List</title>
+    <title>Transaction List</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -25,28 +25,28 @@
     </style>
 </head>
 <body>
-<h1>User List</h1>
+<h1>Transaction List</h1>
 
-<!-- Vérification si la liste des utilisateurs est vide -->
-<div th:if="${users.isEmpty()}">
-    <p>Aucun utilisateur trouvé.</p>
+<!-- Vérification si la liste des transactions est vide -->
+<div th:if="${transactions.isEmpty()}">
+    <p>Aucune transactions trouvées.</p>
 </div>
 
-<!-- Afficher la table des utilisateurs si la liste n'est pas vide -->
-<table th:if="${!users.isEmpty()}">
+<!-- Afficher la table des transactions si la liste n'est pas vide -->
+<table th:if="${!transactions.isEmpty()}">
     <thead>
     <tr>
         <th>#</th>
-        <th>Username</th>
-        <th>Email</th>
+        <th>Amount</th>
+        <th>Description</th>
     </tr>
     </thead>
     <tbody>
-    <!-- Boucle Thymeleaf pour afficher chaque utilisateur -->
-    <tr th:each="user, iterStat : ${users}">
+    <!-- Boucle Thymeleaf pour afficher chaque transactions -->
+    <tr th:each="transaction, iterStat : ${transactions}">
         <td th:text="${iterStat.index + 1}">1</td>
-        <td th:text="${user.username}">Username</td>
-        <td th:text="${user.email}">Email</td>
+        <td th:text="${transaction.amount}">Amount</td>
+        <td th:text="${transaction.description}">Description</td>
     </tr>
     </tbody>
 </table>

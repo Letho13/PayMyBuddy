@@ -16,9 +16,7 @@ public class UserConnection {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String username;
+    private String email;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
 
 }

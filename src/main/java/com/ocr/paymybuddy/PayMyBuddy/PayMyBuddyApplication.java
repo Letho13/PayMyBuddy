@@ -1,6 +1,7 @@
 package com.ocr.paymybuddy.PayMyBuddy;
 
 import com.github.javafaker.Faker;
+import com.ocr.paymybuddy.PayMyBuddy.models.Transaction;
 import com.ocr.paymybuddy.PayMyBuddy.models.User;
 import com.ocr.paymybuddy.PayMyBuddy.repositories.TransactionRepository;
 import com.ocr.paymybuddy.PayMyBuddy.repositories.UserRepository;
@@ -32,6 +33,14 @@ public class PayMyBuddyApplication {
 //                        .email(faker.internet().emailAddress())
 //                        .build();
 //                userRepository.save(user);
+//            }
+//            for (int i =0;i<50;i++){
+//                Faker faker = new Faker();
+//                var transaction = Transaction.builder()
+//                        .amount(faker.number().numberBetween(0,10000))
+//                        .description(faker.commerce().material())
+//                        .build();
+//                transactionRepository.save(transaction);
 //            }
 
         };

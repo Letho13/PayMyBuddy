@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Confirmation creation nouvel utilisateur</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f4f4f4;
+        }
+    </style>
+</head>
+<body>
+<h1>Utilisateur</h1>
+<div th:if="${user.isEmpty()}">
+    <p>Aucun utilisateur trouvés.</p>
+</div>
+
+<table th:if="${!user.isEmpty()}">
+    <thead>
+    <tr>
+    <tr>
+        <td> Username :</td>
+        <td th:text="${user.username}">Username</td>
+    </tr>
+    <tr>
+        <td>Email :</td>
+        <td th:text="${user.email}">Email de l'utilisateur</td>
+    </tr>
+    <tr>
+        <td>Password :</td>
+
+        <td th:text="${user.password}">Mot de passe</td>
+    </tr>
+    </thead>
+</table>
+
+</body>
+</html>
