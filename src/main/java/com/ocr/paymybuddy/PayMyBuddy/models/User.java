@@ -3,6 +3,7 @@ package com.ocr.paymybuddy.PayMyBuddy.models;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.beans.Encoder;
 import java.util.List;
 
 @Data
@@ -27,13 +28,11 @@ public class User {
 
     private String password;
 
-    private String role;
-
     @OneToOne
     @JoinColumn(name="bankAccount_id")
     private BankAccount bankAccount;
 
-    @OneToMany(mappedBy="user")
+    @OneToMany(mappedBy="username")
     private List<UserConnection> connections;
 
 }

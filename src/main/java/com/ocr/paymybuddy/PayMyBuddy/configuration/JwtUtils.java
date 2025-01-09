@@ -23,12 +23,12 @@ public class JwtUtils {
     @Value("${security.jwt.expiry-time-in-seconds}")
     private long expirationTime;
 
-    public String generateToken(String username){
+    public String generateToken(String username) {
         Map<String, Object> claims = new HashMap<>();
         return createToken(claims, username);
     }
 
-    private String createToken(Map<String, Object> claims, String subject){
+    private String createToken(Map<String, Object> claims, String subject) {
         return Jwts.builder()
                 .setClaims(claims)
                 .setSubject(subject)
@@ -53,11 +53,11 @@ public class JwtUtils {
     }
 
     public String extractUsername(String token) {
-        return extractclaims(token, Claims ::getSubject);
+        return extractclaims(token, Claims::getSubject);
     }
 
     private Date extractExpirationDate(String token) {
-        return extractclaims(token, Claims ::getExpiration);
+        return extractclaims(token, Claims::getExpiration);
     }
 
     private <T> T extractclaims(String token, Function<Claims, T> claimsResolver) {

@@ -1,49 +1,16 @@
 package com.ocr.paymybuddy.PayMyBuddy;
 
-import com.github.javafaker.Faker;
-import com.ocr.paymybuddy.PayMyBuddy.models.Transaction;
-import com.ocr.paymybuddy.PayMyBuddy.models.User;
-import com.ocr.paymybuddy.PayMyBuddy.repositories.TransactionRepository;
-import com.ocr.paymybuddy.PayMyBuddy.repositories.UserRepository;
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.Bean;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 
 @SpringBootApplication
+@EnableJpaRepositories(basePackages = "com.ocr.paymybuddy.PayMyBuddy.repositories")
 public class PayMyBuddyApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(PayMyBuddyApplication.class, args);
-    }
-
-    @Bean
-
-    public CommandLineRunner commandLineRunner(
-            UserRepository userRepository,
-            TransactionRepository transactionRepository
-    ){
-        return args -> {
-//            for (int i =0;i<50;i++){
-//                Faker faker = new Faker();
-//                var user = User.builder()
-//                        .username(faker.name().username())
-//                        .password(faker.internet().password())
-//                        .email(faker.internet().emailAddress())
-//                        .build();
-//                userRepository.save(user);
-//            }
-//            for (int i =0;i<50;i++){
-//                Faker faker = new Faker();
-//                var transaction = Transaction.builder()
-//                        .amount(faker.number().numberBetween(0,10000))
-//                        .description(faker.commerce().material())
-//                        .build();
-//                transactionRepository.save(transaction);
-//            }
-
-        };
     }
 
 }
