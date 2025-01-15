@@ -3,6 +3,8 @@ package com.ocr.paymybuddy.PayMyBuddy.models;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.math.BigDecimal;
+
 @Data
 @Entity
 @Builder
@@ -15,7 +17,7 @@ public class Transaction {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    private double amount;
+    private BigDecimal amount;
 
     private String description;
 

@@ -3,8 +3,8 @@ package com.ocr.paymybuddy.PayMyBuddy.models;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.beans.Encoder;
 import java.util.List;
+
 
 @Data
 @AllArgsConstructor

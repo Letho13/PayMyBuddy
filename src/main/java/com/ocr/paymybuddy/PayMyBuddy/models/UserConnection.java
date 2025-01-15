@@ -14,9 +14,18 @@ public class UserConnection {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
     private String username;
     private String email;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
+
+    @ManyToOne
+    @JoinColumn(name = "connected_user_id")
+    private User connectedUser;
 
 
 }
