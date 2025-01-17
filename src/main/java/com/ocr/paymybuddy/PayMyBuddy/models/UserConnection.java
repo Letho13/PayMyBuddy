@@ -19,13 +19,13 @@ public class UserConnection {
     private String email;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
-
+    @JoinColumn(name = "user_id" , nullable = false)
+    private User connectedUser;
 
     @ManyToOne
-    @JoinColumn(name = "connected_user_id")
-    private User connectedUser;
+    @JoinColumn(name = "connected_user_id" , nullable = false)
+    private User targetedUser;
+
 
 
 }

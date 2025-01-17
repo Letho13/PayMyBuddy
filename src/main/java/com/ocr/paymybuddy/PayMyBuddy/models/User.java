@@ -3,6 +3,7 @@ package com.ocr.paymybuddy.PayMyBuddy.models;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -32,7 +33,7 @@ public class User {
     @JoinColumn(name="bankAccount_id")
     private BankAccount bankAccount;
 
-    @OneToMany(mappedBy="username")
-    private List<UserConnection> connections;
+    @OneToMany(mappedBy="targetedUser", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<UserConnection> connections = new ArrayList<>();
 
 }
