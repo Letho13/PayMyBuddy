@@ -22,7 +22,7 @@ public class Transaction {
     private String description;
 
     @ManyToOne
-    @JoinColumn(name = "bankAccount_id")
+    @JoinColumn(name = "bank_account_id")
     private BankAccount bankAccount;
 
 

@@ -47,6 +47,8 @@ public class TransactionController {
 
         model.addAttribute("connections", connectionDtos);
 
+        model.addAttribute("transaction", new PerformTransactionDto());
+
         return "transaction_page";
     }
 //
