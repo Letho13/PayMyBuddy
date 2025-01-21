@@ -5,6 +5,7 @@ import lombok.*;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.UUID;
 
 @Data
 @AllArgsConstructor
@@ -19,7 +20,7 @@ public class BankAccount {
 
     private BigDecimal balance;
 
-    private int accountNumber;
+    private String accountNumber;
 
     @OneToMany(mappedBy = "bankAccount")
     private List<Transaction> transactions;

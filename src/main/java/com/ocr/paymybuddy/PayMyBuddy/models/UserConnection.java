@@ -18,14 +18,6 @@ public class UserConnection {
     private String username;
     private String email;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id" , nullable = false)
-    private User connectedUser;
-
-    @ManyToOne
-    @JoinColumn(name = "connected_user_id" , nullable = false)
-    private User targetedUser;
-
 
 
 }

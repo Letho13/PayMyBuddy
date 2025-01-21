@@ -2,6 +2,7 @@ package com.ocr.paymybuddy.PayMyBuddy.models;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.Cascade;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,11 +30,13 @@ public class User {
 
     private String password;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name="bankAccount_id")
     private BankAccount bankAccount;
 
-    @OneToMany(mappedBy="targetedUser", cascade = CascadeType.ALL, orphanRemoval = true)
+//    @OneToMany(mappedBy="targetedUser", cascade = CascadeType.ALL, orphanRemoval = true)
+
+    @OneToMany
     private List<UserConnection> connections = new ArrayList<>();
 
 }

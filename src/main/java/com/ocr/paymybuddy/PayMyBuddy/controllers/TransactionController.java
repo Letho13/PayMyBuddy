@@ -36,7 +36,20 @@ public class TransactionController {
         com.ocr.paymybuddy.PayMyBuddy.models.User loggedInUser = userRepository.findUserByEmail(email)
                 .orElseThrow(() -> new EntityNotFoundException("Utilisateur avec l'email " + email + " non trouvé"));
 
-        List<UserConnection> connections = userConnectionRepository.findByTargetedUser(loggedInUser);
+        List<UserConnection> loggedInUserConnections = loggedInUser.getConnections();
+
+
+        List<UserConnection> connections = userConnectionRepository.findByEmail(loggedInUser);
+        System.out.println("connections: " + connections);
+
+//        //rajout pour avoir plus de log
+//        connections.forEach(connection -> {
+//            if (connection.getConnectedUser() != null) {
+//                System.out.println("Nom de la connexion : " + connection.getTargetedUser().getUsername());
+//            } else {
+//                System.out.println("Aucun utilisateur connecté pour cette relation");
+//            }
+//        });
 
         model.addAttribute("connections", connections);
 
