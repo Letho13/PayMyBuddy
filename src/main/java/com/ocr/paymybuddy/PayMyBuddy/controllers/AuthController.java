@@ -22,9 +22,8 @@ public class AuthController {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-    private final AuthenticationManager authenticationManager;
     private final UserMapper userMapper;
-    private final UserConnectionRepository userConnectionRepository;
+
 
     @PostMapping("/auth/register")
     public ResponseEntity<?> register(@RequestBody @Valid UserRegistrationDto userRegistrationDto) {

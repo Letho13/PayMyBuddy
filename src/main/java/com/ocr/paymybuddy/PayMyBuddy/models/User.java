@@ -34,9 +34,8 @@ public class User {
     @JoinColumn(name="bankAccount_id")
     private BankAccount bankAccount;
 
-//    @OneToMany(mappedBy="targetedUser", cascade = CascadeType.ALL, orphanRemoval = true)
 
-    @OneToMany
+    @OneToMany(mappedBy="user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<UserConnection> connections = new ArrayList<>();
 
 }
