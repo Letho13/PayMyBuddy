@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Fetch;
 
 @Data
 @AllArgsConstructor
@@ -15,11 +16,14 @@ public class UserConnection {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    private String username;
-    private String email;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+    @JoinColumn(name="user_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    private User fromUser;
+
+
+    @JoinColumn(name="targeted_user_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    private User toTargeted;
 
 }

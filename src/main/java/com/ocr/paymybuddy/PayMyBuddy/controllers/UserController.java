@@ -5,6 +5,7 @@ import com.ocr.paymybuddy.PayMyBuddy.repositories.UserRepository;
 import com.ocr.paymybuddy.PayMyBuddy.services.UserServiceImplementation;
 import com.ocr.paymybuddy.PayMyBuddy.services.dto.AddRelationDTO;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
+@Slf4j
 @Controller
 @RequiredArgsConstructor
 
@@ -46,6 +48,7 @@ public class UserController {
             model.addAttribute("success", "Connexion ajoutée avec succès !");
         } catch (Exception e) {
             model.addAttribute("error", "L'email spécifié n'existe pas.");
+            log.error("connection failed",e);
         }
         return "add_relation_page";
     }
@@ -55,8 +58,6 @@ public class UserController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         return authentication.getName();
     }
-
-
 
 }
 

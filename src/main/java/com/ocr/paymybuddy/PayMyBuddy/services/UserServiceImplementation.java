@@ -66,7 +66,7 @@ public class UserServiceImplementation implements UserService {
         return userRepository.findAll();
     }
 
-
+    @Transactional
     public void addUserConnection(String email, String connectedUserEmail) {
         Optional<User> targetedUser = userRepository.findUserByEmail(email);
 
@@ -75,7 +75,7 @@ public class UserServiceImplementation implements UserService {
                     .orElseThrow(() -> new NullPointerException("User not found"));
 
             boolean noneMatch = connectedUser.getConnections().stream()
-                    .map(UserConnection::getEmail)
+                    .map(connection -> connection.getToTargeted().getEmail())
                     .noneMatch(mail -> mail.equals(email));
 
             if (!noneMatch) {
@@ -83,11 +83,9 @@ public class UserServiceImplementation implements UserService {
             }
 
             UserConnection userConnection = new UserConnection();
-            userConnection.setUser(connectedUser);
-            userConnection.setUsername(targetedUser.get().getUsername());
-            userConnection.setEmail(targetedUser.get().getEmail());
+            userConnection.setFromUser(connectedUser);
+            userConnection.setToTargeted(targetedUser.get());
 
-//            userConnection.setTargetedUser(targetedUser.get());
             userConnectionRepository.save(userConnection);
 
         } else {

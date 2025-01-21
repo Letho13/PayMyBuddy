@@ -12,10 +12,12 @@ import java.util.Optional;
 public interface UserConnectionRepository extends JpaRepository<UserConnection, Integer> {
 
     // Trouver toutes les relations pour un utilisateur donné
-    List<UserConnection> findByUsername(String username);
+    List<UserConnection> findByToTargetedUsername(String username);
 
     // Trouver toutes les relations pour un utilisateur donné
-    List<UserConnection> findByEmail(String email);
+    List<UserConnection> findByToTargetedEmail(String email);
+
+    List<UserConnection> findByFromUserEmail(String email);
 
 
 }
