@@ -17,7 +17,7 @@ public class ConnectionMapper {
     public List<ConnectionDto> connectionDtoFromConnection(List<UserConnection> userConnections) {
 
         return userConnections.stream()
-                .map(connection -> new ConnectionDto(connection.getToTargeted().getUsername()))
+                .map(connection -> new ConnectionDto(connection.getToTargeted().getEmail()))
                 .collect(Collectors.toList());
     }
 

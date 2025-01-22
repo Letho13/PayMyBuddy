@@ -72,10 +72,10 @@
 
                         <form action="#" method="post" th:action="@{/transaction}" th:object="${transaction}" style="display: flex; align-items: center; justify-content: center; gap: 10px;">
                             <!-- Liste déroulante -->
-                            <select class="form-select form-select-lg mb-3 w-25" aria-label="Large select example" name="username" id="user" th:field="*{emailBeneficiary}">
+                            <select class="form-select form-select-lg mb-3 w-25" aria-label="Large select example" name="email" id="user" th:field="*{emailBeneficiary}">
                                 <option value="" disabled selected>Sélectionner une relation</option>
                                 <!-- Parcours de la liste des connexions -->
-                                <option th:each="connection : ${connections}" th:value="${connection.username}" th:text="${connection.username}">
+                                <option th:each="connection : ${connections}" th:value="${connection.email}" th:text="${connection.email}">
                                     Connexion
                                 </option>
                             </select>
