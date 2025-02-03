@@ -8,7 +8,10 @@ import com.ocr.paymybuddy.PayMyBuddy.repositories.UserConnectionRepository;
 import com.ocr.paymybuddy.PayMyBuddy.repositories.UserRepository;
 import com.ocr.paymybuddy.PayMyBuddy.services.dto.UserRegistrationDto;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -18,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.util.*;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class UserServiceImplementation implements UserService {
@@ -70,27 +74,46 @@ public class UserServiceImplementation implements UserService {
     public void addUserConnection(String email, String connectedUserEmail) {
         Optional<User> targetedUser = userRepository.findUserByEmail(email);
 
-        if (targetedUser.isPresent()) {
-            User connectedUser = userRepository.findUserByEmail(connectedUserEmail)
-                    .orElseThrow(() -> new NullPointerException("User not found"));
-
-            boolean noneMatch = connectedUser.getConnections().stream()
-                    .map(connection -> connection.getToTargeted().getEmail())
-                    .noneMatch(mail -> mail.equals(email));
-
-            if (!noneMatch) {
-                throw new IllegalArgumentException("La connexion existe déjà entre ces utilisateurs.");
-            }
-
-            UserConnection userConnection = new UserConnection();
-            userConnection.setFromUser(connectedUser);
-            userConnection.setToTargeted(targetedUser.get());
-
-            userConnectionRepository.save(userConnection);
-
-        } else {
+        if (targetedUser.isEmpty()) {
             throw new IllegalArgumentException("Utilisateur avec cet e-mail introuvable.");
         }
+        User connectedUser = userRepository.findUserByEmail(connectedUserEmail)
+                .orElseThrow(() -> new NullPointerException("Utilisateur connecté non trouvé"));
+
+        boolean alreadyConnected = connectedUser.getConnections().stream()
+                .anyMatch(connection -> connection.getToTargeted().getId().equals(targetedUser.get().getId()));
+
+        if (alreadyConnected) {
+            log.warn("La connexion existe déjà entre {} et {}", connectedUserEmail, email);
+            throw new IllegalArgumentException("Vous êtes déjà connecté à cet utilisateur.");
+        }
+
+        UserConnection userConnection = new UserConnection();
+        userConnection.setFromUser(connectedUser);
+        userConnection.setToTargeted(targetedUser.get());
+
+        userConnectionRepository.save(userConnection);
+        log.info("Connexion ajoutée entre {} et {}", connectedUserEmail, email);
+
+    }
+
+    public void updateUser(String username, String email, String password) {
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentEmail = authentication.getName();
+
+        User user = userRepository.findUserByEmail(currentEmail)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        user.setUsername(username);
+        user.setEmail(email);
+
+        if (password != null && !password.isBlank()) {
+            user.setPassword(passwordEncoder.encode(password));
+        }
+
+        userRepository.save(user);
+
     }
 
 }

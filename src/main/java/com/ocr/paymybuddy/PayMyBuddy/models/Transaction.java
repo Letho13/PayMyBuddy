@@ -21,9 +21,12 @@ public class Transaction {
 
     private String description;
 
-    @ManyToOne
+    private String beneficiaryUsername;
+
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "bank_account_id")
     private BankAccount bankAccount;
+
 
 
 }

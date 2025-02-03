@@ -3,7 +3,7 @@ package com.ocr.paymybuddy.PayMyBuddy.controllers;
 
 import com.ocr.paymybuddy.PayMyBuddy.repositories.UserRepository;
 import com.ocr.paymybuddy.PayMyBuddy.services.UserServiceImplementation;
-import com.ocr.paymybuddy.PayMyBuddy.services.dto.AddRelationDTO;
+import com.ocr.paymybuddy.PayMyBuddy.services.dto.AddRelationDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
@@ -11,9 +11,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
+
 
 @Slf4j
 @Controller
@@ -25,30 +24,53 @@ public class UserController {
     private final UserRepository userRepository;
 
     @GetMapping("/profil")
-    public String profil(Model model) {
+    public String profil(Model model, @RequestParam(value = "success", required = false) String success) {
+
+        model.addAttribute("activePage", "profil");
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User user = (User) authentication.getPrincipal();
-        model.addAttribute("user", userRepository.findUserByEmail(user.getUsername()).get());
+        User userSecurity = (User) authentication.getPrincipal();
+
+        com.ocr.paymybuddy.PayMyBuddy.models.User user = userRepository.findUserByEmail(userSecurity.getUsername()).orElseThrow(() -> new RuntimeException("User not found"));
+        model.addAttribute("user", user);
+
+        if (success != null) {
+            model.addAttribute("message", "Profil mis à jour avec succès !");
+            model.addAttribute("messageType", "success");
+        }
 
         return "profil_page";
     }
 
+    @PostMapping("/profil/edit")
+    public String updateUser(@ModelAttribute com.ocr.paymybuddy.PayMyBuddy.models.User user, @RequestParam(value = "password", required = false) String password, Model model) {
+        try {
+            userServiceImplementation.updateUser(user.getUsername(), user.getEmail(), password);
+            return "redirect:/profil?success=true";
+        } catch (Exception e) {
+            model.addAttribute("message", "Erreur lors de la mise à jour du profil.");
+            return "profil_page";
+        }
+    }
+
     @GetMapping("/add-relation")
     public String addRelation(Model model) {
-        model.addAttribute("addRelationDTO", new AddRelationDTO());
+
+        model.addAttribute("activePage", "add-relation");
+
+        model.addAttribute("addRelationDto", new AddRelationDto());
         return "add_relation_page";
     }
 
     @PostMapping("/addConnection")
-    public String addConnection(@ModelAttribute AddRelationDTO addRelationDTO, Model model) {
+    public String addConnection(@ModelAttribute AddRelationDto addRelationDto, Model model) {
         try {
-            // Appel au service pour ajouter la connexion
-            userServiceImplementation.addUserConnection(addRelationDTO.getEmailAddedUser(), getCurrentUserEmail());
+
+            userServiceImplementation.addUserConnection(addRelationDto.getEmailAddedUser(), getCurrentUserEmail());
             model.addAttribute("success", "Connexion ajoutée avec succès !");
         } catch (Exception e) {
             model.addAttribute("error", "L'email spécifié n'existe pas.");
-            log.error("connection failed",e);
+            log.error("connection failed", e);
         }
         return "add_relation_page";
     }

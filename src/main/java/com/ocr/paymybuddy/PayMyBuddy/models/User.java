@@ -32,9 +32,7 @@ public class User {
     private String password;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name="bank_account_id")
     private BankAccount bankAccount;
-
 
     @OneToMany(fetch = FetchType.LAZY)
     private List<UserConnection> connections = new ArrayList<>();

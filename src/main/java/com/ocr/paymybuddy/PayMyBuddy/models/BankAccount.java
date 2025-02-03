@@ -11,8 +11,11 @@ import java.util.UUID;
 @AllArgsConstructor
 @Entity
 @NoArgsConstructor
+
 @Table(name = "bank_account")
 public class BankAccount {
+
+
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,8 +28,7 @@ public class BankAccount {
     @OneToMany(mappedBy = "bankAccount")
     private List<Transaction> transactions;
 
-    @OneToOne
-    @JoinColumn(name="user_id")
+    @OneToOne(mappedBy = "bankAccount")
     private User user;
 
 }

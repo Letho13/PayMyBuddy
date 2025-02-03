@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Data
 @NoArgsConstructor
-public class AddRelationDTO {
+public class AddRelationDto {
 
     private String emailAddedUser;
 
