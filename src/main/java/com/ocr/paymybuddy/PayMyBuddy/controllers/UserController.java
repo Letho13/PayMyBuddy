@@ -6,13 +6,13 @@ import com.ocr.paymybuddy.PayMyBuddy.services.UserServiceImplementation;
 import com.ocr.paymybuddy.PayMyBuddy.services.dto.AddRelationDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
 
 @Slf4j
 @Controller
@@ -68,9 +68,12 @@ public class UserController {
 
             userServiceImplementation.addUserConnection(addRelationDto.getEmailAddedUser(), getCurrentUserEmail());
             model.addAttribute("success", "Connexion ajoutée avec succès !");
-        } catch (Exception e) {
-            model.addAttribute("error", "L'email spécifié n'existe pas.");
-            log.error("connection failed", e);
+        } catch (DataIntegrityViolationException e) {
+            model.addAttribute("error", "L'utilisateur est déjà lié au compte");
+
+        } catch (IllegalArgumentException exception) {
+            model.addAttribute("error", exception.getMessage());
+            log.error("ErrorMessage : {}", exception.getMessage());
         }
         return "add_relation_page";
     }

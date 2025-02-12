@@ -5,17 +5,13 @@ import lombok.*;
 
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.UUID;
 
 @Data
 @AllArgsConstructor
 @Entity
 @NoArgsConstructor
-
 @Table(name = "bank_account")
 public class BankAccount {
-
-
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

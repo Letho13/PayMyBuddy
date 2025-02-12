@@ -6,9 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
 @AllArgsConstructor
-
 @NoArgsConstructor
-
 public class UserRegistrationDto {
     public @NotBlank String getUsername() {
         return username;

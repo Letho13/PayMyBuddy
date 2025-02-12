@@ -1,13 +1,8 @@
 package com.ocr.paymybuddy.PayMyBuddy.mapper;
 
-import com.ocr.paymybuddy.PayMyBuddy.models.User;
 import com.ocr.paymybuddy.PayMyBuddy.models.UserConnection;
 import com.ocr.paymybuddy.PayMyBuddy.services.dto.ConnectionDto;
-import com.ocr.paymybuddy.PayMyBuddy.services.dto.UserRegistrationDto;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
-
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -20,5 +15,4 @@ public class ConnectionMapper {
                 .map(connection -> new ConnectionDto(connection.getToTargeted().getEmail()))
                 .collect(Collectors.toList());
     }
-
 }

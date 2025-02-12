@@ -11,12 +11,9 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
-
 @Configuration
 @EnableWebSecurity
-
 public class SecurityConfig {
-
 
     private final UserServiceImplementation userServiceImplementation;
 
@@ -24,7 +21,6 @@ public class SecurityConfig {
     public SecurityConfig(UserServiceImplementation userServiceImplementation) {
         this.userServiceImplementation = userServiceImplementation;
     }
-
 
     @Bean
     public AuthenticationManager authenticationManager(HttpSecurity http, PasswordEncoder passwordEncoder) throws Exception {
@@ -60,6 +56,5 @@ public class SecurityConfig {
                 })
                 .build();
     }
-
 
 }

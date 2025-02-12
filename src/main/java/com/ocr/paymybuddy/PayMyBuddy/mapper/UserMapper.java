@@ -15,5 +15,4 @@ public class UserMapper {
                 .password(passwordEncoder.encode(userRegistrationDto.getPassword()))
                 .build();
     }
-
 }

@@ -4,10 +4,8 @@ import com.ocr.paymybuddy.PayMyBuddy.constant.Fare;
 import com.ocr.paymybuddy.PayMyBuddy.exceptions.TransactionException;
 import com.ocr.paymybuddy.PayMyBuddy.models.Transaction;
 import com.ocr.paymybuddy.PayMyBuddy.models.User;
-import com.ocr.paymybuddy.PayMyBuddy.models.UserConnection;
 import com.ocr.paymybuddy.PayMyBuddy.repositories.BankAccountRepository;
 import com.ocr.paymybuddy.PayMyBuddy.repositories.TransactionRepository;
-import com.ocr.paymybuddy.PayMyBuddy.repositories.UserConnectionRepository;
 import com.ocr.paymybuddy.PayMyBuddy.repositories.UserRepository;
 import com.ocr.paymybuddy.PayMyBuddy.services.dto.PerformTransactionDto;
 import jakarta.persistence.EntityNotFoundException;
@@ -25,18 +23,6 @@ public class TransactionService {
     private final TransactionRepository transactionRepository;
     private final BankAccountRepository bankAccountRepository;
     private final UserRepository userRepository;
-    private final UserConnectionRepository userConnectionRepository;
-    private Fare fare;
-
-
-    public List<Transaction> findAll() {
-
-        return transactionRepository.findAll();
-    }
-
-    public void addTransaction(Transaction transaction) {
-        transactionRepository.save(transaction);
-    }
 
 
     @Transactional(rollbackFor = {TransactionException.class})
@@ -57,16 +43,13 @@ public class TransactionService {
                 .subtract(amountTransaction)
                 .subtract(amountTransaction.multiply(Fare.fareBytransaction));
 
-//        BigDecimal newBalanceCurrentUser = subtractOperation(currentUser, amountTransaction, (amountTransaction*fare));
         BigDecimal newBalanceBeneficiary = addOperation(beneficiaryUser, amountTransaction);
 
         currentUser.getBankAccount().setBalance(newBalanceCurrentUser);
         beneficiaryUser.getBankAccount().setBalance(newBalanceBeneficiary);
 
-
         bankAccountRepository.save(currentUser.getBankAccount());
         bankAccountRepository.save(beneficiaryUser.getBankAccount());
-
 
         Transaction transactionDebit = new Transaction();
         transactionDebit.setBankAccount(currentUser.getBankAccount());
@@ -82,10 +65,7 @@ public class TransactionService {
         transactionCredit.setBeneficiaryUsername(beneficiaryUser.getUsername());
         transactionRepository.save(transactionCredit);
 
-
-
     }
-
 
     private static BigDecimal addOperation(User beneficiaryUser, BigDecimal amountTransaction) {
         return beneficiaryUser.getBankAccount().getBalance().add(amountTransaction);
@@ -101,7 +81,6 @@ public class TransactionService {
 
         return transactionRepository.findByBankAccountUserEmail(email);
     }
-
 
 }
 

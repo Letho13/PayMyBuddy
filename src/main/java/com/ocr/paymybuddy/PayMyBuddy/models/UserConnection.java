@@ -4,15 +4,13 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.Fetch;
 
 @Data
 @AllArgsConstructor
 @Entity
 @NoArgsConstructor
 @Table(name = "connections",
-        uniqueConstraints = @UniqueConstraint(columnNames = {"user_id", "targeted_user_id"})
-)
+        uniqueConstraints = @UniqueConstraint(columnNames = {"user_id", "targeted_user_id"}))
 public class UserConnection {
 
     @Id

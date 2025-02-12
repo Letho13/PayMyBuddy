@@ -8,7 +8,6 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -30,17 +29,14 @@ public class BankAccountService {
         com.ocr.paymybuddy.PayMyBuddy.models.User loggedInUser = userRepository.findUserByEmail(email)
                 .orElseThrow(() -> new EntityNotFoundException("Utilisateur avec l'email " + email + " non trouvé"));
 
-        // Récupérer le compte bancaire associé à l'utilisateur
         BankAccount bankAccount = loggedInUser.getBankAccount();
         if (bankAccount == null) {
             throw new IllegalStateException("No bank account associated with this user");
         }
 
-        // Ajouter le montant au solde existant
         BigDecimal newBalance = bankAccount.getBalance().add(amount);
         bankAccount.setBalance(newBalance);
 
-        // Sauvegarder les modifications
         bankAccountRepository.save(bankAccount);
     }
 
@@ -51,12 +47,10 @@ public class BankAccountService {
         com.ocr.paymybuddy.PayMyBuddy.models.User loggedInUser = userRepository.findUserByEmail(email)
                 .orElseThrow(() -> new EntityNotFoundException("Utilisateur avec l'email " + email + " non trouvé"));
 
-        // Vérifie si l'utilisateur a un compte bancaire
         BankAccount bankAccount = loggedInUser.getBankAccount();
         if (bankAccount == null) {
             throw new IllegalStateException("Aucun compte bancaire associé à cet utilisateur");
         }
-
         return bankAccount.getBalance();
     }
 }

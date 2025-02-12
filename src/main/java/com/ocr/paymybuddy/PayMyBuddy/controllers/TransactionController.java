@@ -11,7 +11,6 @@ import com.ocr.paymybuddy.PayMyBuddy.services.TransactionService;
 import com.ocr.paymybuddy.PayMyBuddy.services.dto.ConnectionDto;
 import com.ocr.paymybuddy.PayMyBuddy.services.dto.PerformTransactionDto;
 import jakarta.persistence.EntityNotFoundException;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -38,7 +37,6 @@ public class TransactionController {
     private final ConnectionMapper connectionMapper;
     private final BankAccountService bankAccountService;
 
-
     @GetMapping
     @Transactional(readOnly = true)
     public String transaction(Model model) {
@@ -62,7 +60,7 @@ public class TransactionController {
         model.addAttribute("connections", connectionDtos);
         model.addAttribute("transactions", transactions);
         model.addAttribute("transaction", new PerformTransactionDto());
-        model.addAttribute("balance", balance); // 🔹 Ajouter la balance au modèle
+        model.addAttribute("balance", balance);
 
         return "transaction_page";
     }
@@ -87,28 +85,6 @@ public class TransactionController {
         }
     }
 
-
-
-
-//    @PostMapping()
-//    public String handleTransaction(@ModelAttribute("transaction") PerformTransactionDto performTransactionDto, Model model) {
-//        try {
-//            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//            String currentUserEmail = authentication.getName();
-//
-//            transactionService.performTransaction(performTransactionDto, currentUserEmail);
-//
-//            model.addAttribute("messageType", "success");
-//            model.addAttribute("message", "Transaction réussie !");
-//        } catch (TransactionException e) {
-//            // Ajouter un message d'erreur
-//            model.addAttribute("messageType", "danger");
-//            model.addAttribute("message", "Erreur : " + e.getMessage());
-//        }
-//
-//        return "transaction_page";
-//    }
-
     @PostMapping("/addAmount")
     public String addAmountToBankAccount(@RequestParam BigDecimal amount, Model model) {
         try {
@@ -119,9 +95,7 @@ public class TransactionController {
         } catch (Exception e) {
             model.addAttribute("errorMessage", "Erreur : " + e.getMessage());
         }
-
         return "redirect:/transaction";
     }
-
 
 }

@@ -17,7 +17,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.math.BigDecimal;
 import java.util.*;
 
@@ -26,13 +25,9 @@ import java.util.*;
 @RequiredArgsConstructor
 public class UserServiceImplementation implements UserService {
 
-
     private final UserRepository userRepository;
-
     private final PasswordEncoder passwordEncoder;
-
     private final UserConnectionRepository userConnectionRepository;
-
 
     @Override
     @Transactional
@@ -51,7 +46,6 @@ public class UserServiceImplementation implements UserService {
         return userRepository.save(savedUser);
     }
 
-
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
 
@@ -62,7 +56,6 @@ public class UserServiceImplementation implements UserService {
         }
         return new org.springframework.security.core.userdetails.User(optionalUser.get().getEmail(), optionalUser.get().getPassword(),
                 new HashSet<GrantedAuthority>());
-
     }
 
     @Override
@@ -80,13 +73,6 @@ public class UserServiceImplementation implements UserService {
         User connectedUser = userRepository.findUserByEmail(connectedUserEmail)
                 .orElseThrow(() -> new NullPointerException("Utilisateur connecté non trouvé"));
 
-        boolean alreadyConnected = connectedUser.getConnections().stream()
-                .anyMatch(connection -> connection.getToTargeted().getId().equals(targetedUser.get().getId()));
-
-        if (alreadyConnected) {
-            log.warn("La connexion existe déjà entre {} et {}", connectedUserEmail, email);
-            throw new IllegalArgumentException("Vous êtes déjà connecté à cet utilisateur.");
-        }
 
         UserConnection userConnection = new UserConnection();
         userConnection.setFromUser(connectedUser);
@@ -94,7 +80,6 @@ public class UserServiceImplementation implements UserService {
 
         userConnectionRepository.save(userConnection);
         log.info("Connexion ajoutée entre {} et {}", connectedUserEmail, email);
-
     }
 
     public void updateUser(String username, String email, String password) {
@@ -113,7 +98,5 @@ public class UserServiceImplementation implements UserService {
         }
 
         userRepository.save(user);
-
     }
-
 }
