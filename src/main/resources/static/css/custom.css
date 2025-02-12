@@ -1,0 +1,27 @@
+
+.nav-link {
+    color: lightgrey !important;
+}
+
+/* Liens en gris par défaut */
+.navbar .nav-link {
+    color: lightgrey !important;
+}
+
+/* Style pour l'élément actif */
+.active .nav-link {
+    color: #82008b !important;
+    font-weight: bold;
+}
+
+/* Effet au survol */
+.nav-link:hover {
+    color: darkblue;
+    font-weight: bold;
+    font-size: 1.1em;
+    transition: all 0.3s ease;
+}
+
+a {
+    color: #343a40 !important;
+}
