@@ -4,6 +4,7 @@ package com.ocr.paymybuddy.PayMyBuddy.controllers;
 import com.ocr.paymybuddy.PayMyBuddy.repositories.UserRepository;
 import com.ocr.paymybuddy.PayMyBuddy.services.UserServiceImplementation;
 import com.ocr.paymybuddy.PayMyBuddy.services.dto.AddRelationDto;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -43,9 +44,23 @@ public class UserController {
     }
 
     @PostMapping("/profil/edit")
-    public String updateUser(@ModelAttribute com.ocr.paymybuddy.PayMyBuddy.models.User user, @RequestParam(value = "password", required = false) String password, Model model) {
+    public String updateUser(@ModelAttribute com.ocr.paymybuddy.PayMyBuddy.models.User user,
+                             @RequestParam(value = "password", required = false) String password,
+                             Model model,
+                             HttpServletRequest request) {
         try {
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            String currentEmail = authentication.getName();
+            boolean emailChanged = !user.getEmail().equalsIgnoreCase(currentEmail);
+
             userServiceImplementation.updateUser(user.getUsername(), user.getEmail(), password);
+
+            if (emailChanged) {
+                SecurityContextHolder.clearContext();
+                request.getSession().invalidate();
+                return "redirect:/login?emailChanged=true";
+            }
+
             return "redirect:/profil?success=true";
         } catch (Exception e) {
             model.addAttribute("message", "Erreur lors de la mise à jour du profil.");

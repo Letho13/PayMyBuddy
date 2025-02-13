@@ -19,9 +19,9 @@
                             <div class="col-md-10 col-lg-6 col-xl-5 order-2 order-lg-1">
                                 <p class="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">PAY MY BUDDY</p>
 
-                                <!--                                <div th:if="${error}" class="alert alert-danger">-->
-                                <!--                                    <p th:text="${error}"></p>-->
-                                <!--                                </div>-->
+                                <div th:if="${param.emailChanged}" class="alert alert-warning">
+                                    Votre adresse email a été modifiée. Veuillez vous reconnecter avec votre nouvel email.
+                                </div>
 
                                 <form class="mx-1 mx-md-4" th:action="@{/login}" method="post">
                                     <div class="d-flex flex-row align-items-center mb-4">

@@ -1,5 +1,6 @@
 package com.ocr.paymybuddy.PayMyBuddy;
 
+import jakarta.servlet.http.HttpServletRequest;
 import com.ocr.paymybuddy.PayMyBuddy.controllers.UserController;
 import com.ocr.paymybuddy.PayMyBuddy.repositories.UserRepository;
 import com.ocr.paymybuddy.PayMyBuddy.services.UserServiceImplementation;
@@ -29,6 +30,9 @@ class UserControllerTest {
 
     @Mock
     private UserServiceImplementation userServiceImplementation;
+
+    @Mock
+    private HttpServletRequest request;
 
     @Mock
     private UserRepository userRepository;
@@ -72,10 +76,10 @@ class UserControllerTest {
         user.setUsername("testUser");
         user.setEmail("test@example.com");
 
-        String viewName = userController.updateUser(user, "newPassword", model);
+        String viewName = userController.updateUser(user, "newPassword", model, request);
 
         verify(userServiceImplementation).updateUser("testUser", "test@example.com", "newPassword");
-        assertEquals("redirect:/profil?success=true", viewName);
+        assertEquals("profil_page", viewName);
     }
 
     @Test
@@ -86,7 +90,7 @@ class UserControllerTest {
         user.setUsername("testUser");
         user.setEmail("test@example.com");
 
-        String viewName = userController.updateUser(user, "newPassword", model);
+        String viewName = userController.updateUser(user, "newPassword", model, request);
 
         verify(model).addAttribute("message", "Erreur lors de la mise à jour du profil.");
         assertEquals("profil_page", viewName);

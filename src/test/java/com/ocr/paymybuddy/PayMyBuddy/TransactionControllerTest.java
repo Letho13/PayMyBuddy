@@ -1,5 +1,6 @@
 package com.ocr.paymybuddy.PayMyBuddy;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.ocr.paymybuddy.PayMyBuddy.controllers.TransactionController;
 import com.ocr.paymybuddy.PayMyBuddy.exceptions.TransactionException;
 import com.ocr.paymybuddy.PayMyBuddy.mapper.ConnectionMapper;
@@ -94,13 +95,23 @@ class TransactionControllerTest {
     void testHandleTransaction_Success() throws TransactionException {
 
         PerformTransactionDto dto = new PerformTransactionDto();
+
+        // Mock de l'authentification utilisateur
         when(securityContext.getAuthentication()).thenReturn(authentication);
         when(authentication.getName()).thenReturn("test@example.com");
 
+        doNothing().when(transactionService).performTransaction(dto, "test@example.com");
+
+        when(bankAccountService.getBalanceForLoggedInUser()).thenReturn(BigDecimal.valueOf(100.00));
+
+        when(transactionService.getTransactionsForUser("test@example.com")).thenReturn(Collections.emptyList());
+
         ResponseEntity<Map<String, String>> response = transactionController.handleTransaction(dto);
-        verify(transactionService).performTransaction(dto, "test@example.com");
-        assertEquals("success", response.getBody().get("messageType"));
-        assertEquals("Transaction réussie !", response.getBody().get("message"));
+
+        verify(transactionService).performTransaction(dto, "test@example.com"); // Vérifie que la transaction a été effectuée
+        assertEquals("success", response.getBody().get("messageType")); // Vérifie le message de succès
+        assertEquals("Transaction réussie !", response.getBody().get("message")); // Vérifie le bon message utilisateur
+        assertEquals("100.0", response.getBody().get("newBalance")); // Vérifie le solde mis à jour
     }
 
     @Test

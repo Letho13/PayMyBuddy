@@ -1,5 +1,7 @@
 package com.ocr.paymybuddy.PayMyBuddy.controllers;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ocr.paymybuddy.PayMyBuddy.exceptions.TransactionException;
 import com.ocr.paymybuddy.PayMyBuddy.mapper.ConnectionMapper;
 import com.ocr.paymybuddy.PayMyBuddy.models.Transaction;
@@ -22,9 +24,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Controller
 @RequiredArgsConstructor
@@ -75,14 +75,36 @@ public class TransactionController {
 
             transactionService.performTransaction(performTransactionDto, currentUserEmail);
 
+            BigDecimal newBalance = bankAccountService.getBalanceForLoggedInUser();
+
+            List<Transaction> updatedTransactions = transactionService.getTransactionsForUser(currentUserEmail);
+
+            List<Map<String, String>> transactionsList = getMaps(updatedTransactions);
+
             response.put("messageType", "success");
+            response.put("updatedTransactions", new ObjectMapper().writeValueAsString(transactionsList));
             response.put("message", "Transaction réussie !");
+            response.put("newBalance", newBalance.toString());
             return ResponseEntity.ok(response);
         } catch (TransactionException e) {
             response.put("messageType", "danger");
             response.put("message", "Erreur : " + e.getMessage());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
         }
+    }
+
+    private static List<Map<String, String>> getMaps(List<Transaction> updatedTransactions) {
+        List<Map<String, String>> transactionsList = new ArrayList<>();
+        for (Transaction transaction : updatedTransactions) {
+            Map<String, String> transactionMap = new HashMap<>();
+            transactionMap.put("beneficiaryUsername", transaction.getBeneficiaryUsername());
+            transactionMap.put("description", transaction.getDescription());
+            transactionMap.put("amount", transaction.getAmount().toString());
+            transactionsList.add(transactionMap);
+        }
+        return transactionsList;
     }
 
     @PostMapping("/addAmount")
@@ -97,5 +119,13 @@ public class TransactionController {
         }
         return "redirect:/transaction";
     }
+
+    @GetMapping("/balance")
+    @ResponseBody
+    public ResponseEntity<BigDecimal> getBalance() {
+        BigDecimal balance = bankAccountService.getBalanceForLoggedInUser();
+        return ResponseEntity.ok(balance);
+    }
+
 
 }

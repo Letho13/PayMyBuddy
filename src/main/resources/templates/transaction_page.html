@@ -43,7 +43,7 @@
 
 <div class="container mt-4">
     <div class="row">
-        <!-- Encadré "Ajouter un montant" en haut à gauche -->
+
         <div class="col-md-3">
             <div class="card card-custom p-3">
                 <h5 class="transaction-header">Ajouter un montant</h5>
@@ -55,13 +55,14 @@
             </div>
         </div>
 
-        <!-- Formulaire et liste des transactions alignés au centre -->
+
         <div class="col-md-9">
             <div class="card card-custom p-4 mb-4">
                 <div class="d-flex justify-content-between align-items-center mb-3">
                     <span>Utilisateur : <strong th:text="${username}"></strong></span>
                     <div class="alert alert-info mb-0 bg-white border">
-                        Solde actuel : <strong th:text="${balance}"></strong> €
+                        Solde actuel : <strong id="balance" th:text="${balance}"></strong> €
+
                     </div>
                 </div>
                 <form id="transactionForm" th:action="@{/transaction}" method="post" th:object="${transaction}"
@@ -114,30 +115,82 @@
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
+
+    function updateBalance() {
+        $.ajax({
+            url: "/transaction/balance",
+            type: "GET",
+            success: function (newBalance) {
+                console.log("Nouveau solde récupéré :", newBalance);
+                $("#balance").text(newBalance + " €"); // ✅ Met à jour l'affichage
+            },
+            error: function (xhr) {
+                console.error("Erreur lors de la récupération du solde :", xhr.responseText);
+            }
+        });
+    }
+
     $(document).ready(function () {
         $("#transactionForm").submit(function (e) {
-            e.preventDefault(); // Empêche le rechargement de la page
+            e.preventDefault(); // Empêcher le rechargement de la page
 
-            var formData = $(this).serialize(); // Récupère les données du formulaire
+            var formData = $(this).serialize();
 
             $.ajax({
-                url: "/transaction",  // L'URL du contrôleur Spring Boot
+                url: "/transaction",
                 type: "POST",
-                data: formData,  // Envoie les données du formulaire
+                data: formData,
+                dataType: "json", // Assurez-vous que le serveur renvoie bien du JSON
                 success: function (response) {
-                    // Injecte l'alerte Bootstrap dans la page
+                    console.log("Réponse AJAX :", response); // Vérification
+
+                    // ✅ Afficher le message de succès ou d'erreur
                     $("#alert-container").html(
                         "<div class='alert alert-" + response.messageType + " alert-dismissible fade show' role='alert'>" +
                         response.message +
                         "<button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>" +
                         "</div>"
                     );
+
+                    updateBalance();
+
+// ✅ Mettre à jour la liste des transactions
+                    if (response.updatedTransactions) {
+                        var transactionTable = $("tbody");
+                        transactionTable.empty(); // Vider la table des transactions
+
+                        try {
+                            var transactionsArray = JSON.parse(response.updatedTransactions); // ✅ Convertir en tableau JSON
+
+                            transactionsArray.forEach(function (transaction) {
+                                transactionTable.append(
+                                    "<tr>" +
+                                    "<td>" + transaction.beneficiaryUsername + "</td>" +
+                                    "<td>" + transaction.description + "</td>" +
+                                    "<td>" + transaction.amount + " €</td>" +
+                                    "</tr>"
+                                );
+                            });
+                        } catch (error) {
+                            console.error("Erreur de parsing des transactions :", error);
+                        }
+                    }
+
+                    // ✅ Réinitialiser les champs du formulaire
+                    $("#transactionForm")[0].reset();
+                    $("#transactionForm input[name='amount']").val(""); // Remettre le montant à 0
                 },
                 error: function (xhr, status, error) {
-                    // En cas d'erreur, afficher un message générique
+                    console.log("Erreur AJAX :", xhr.responseText);
+
+                    var errorMessage = "Une erreur est survenue lors de la transaction.";
+                    if (xhr.responseJSON && xhr.responseJSON.message) {
+                        errorMessage = xhr.responseJSON.message;
+                    }
+
                     $("#alert-container").html(
                         "<div class='alert alert-danger alert-dismissible fade show' role='alert'>" +
-                        "Une erreur est survenue lors de la transaction." +
+                        errorMessage +
                         "<button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>" +
                         "</div>"
                     );
@@ -145,6 +198,8 @@
             });
         });
     });
+
+
 </script>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

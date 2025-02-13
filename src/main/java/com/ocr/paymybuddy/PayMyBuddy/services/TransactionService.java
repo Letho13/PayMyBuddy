@@ -36,7 +36,7 @@ public class TransactionService {
 
         BigDecimal balanceCurrentUser = currentUser.getBankAccount().getBalance();
         if (balanceCurrentUser.compareTo(amountTransaction) < 0) {
-            throw new TransactionException("Montant insuffisant");
+            throw new TransactionException("Solde insuffisant");
         }
 
         BigDecimal newBalanceCurrentUser = currentUser.getBankAccount().getBalance()
