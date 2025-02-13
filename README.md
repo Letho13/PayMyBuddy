@@ -22,11 +22,15 @@ Pay My Buddy is a website that allows users to transfer money between people by 
 
 - Sign in with an email address, username, and a protected password.
 - Add friends already registered with their email.
-- Add money or withdraw from your bank.
 - Transfer the chosen amount or receive it from a friend.
 - Consult the list of past transactions.
 - Modify your personal information if needed.
 - Each transaction is charged a 0.5% fee, paid by the sender.
+
+## Features
+
+- Add money or withdraw from your bank.
+
 
 ## MPD
 
