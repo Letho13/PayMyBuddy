@@ -27,4 +27,8 @@ public class Transaction {
     @JoinColumn(name = "bank_account_id")
     private BankAccount bankAccount;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "beneficiary_bank_account_id")
+    private BankAccount receiverBankAccount;
+
 }

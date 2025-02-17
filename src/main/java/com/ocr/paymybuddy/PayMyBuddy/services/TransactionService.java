@@ -33,7 +33,6 @@ public class TransactionService {
         User currentUser = userRepository.findUserByEmail(emailCurrentUser).get();
         User beneficiaryUser = userRepository.findUserByEmail(performTransactionDto.getEmailBeneficiary()).get();
 
-
         BigDecimal balanceCurrentUser = currentUser.getBankAccount().getBalance();
         if (balanceCurrentUser.compareTo(amountTransaction) < 0) {
             throw new TransactionException("Solde insuffisant");
@@ -51,19 +50,13 @@ public class TransactionService {
         bankAccountRepository.save(currentUser.getBankAccount());
         bankAccountRepository.save(beneficiaryUser.getBankAccount());
 
-        Transaction transactionDebit = new Transaction();
-        transactionDebit.setBankAccount(currentUser.getBankAccount());
-        transactionDebit.setAmount(amountTransaction.negate());
-        transactionDebit.setDescription(performTransactionDto.getDescription());
-        transactionDebit.setBeneficiaryUsername(beneficiaryUser.getUsername());
-        transactionRepository.save(transactionDebit);
-
-        Transaction transactionCredit = new Transaction();
-        transactionCredit.setBankAccount(beneficiaryUser.getBankAccount());
-        transactionCredit.setAmount(amountTransaction);
-        transactionCredit.setDescription(performTransactionDto.getDescription());
-        transactionCredit.setBeneficiaryUsername(beneficiaryUser.getUsername());
-        transactionRepository.save(transactionCredit);
+        Transaction transaction = new Transaction();
+        transaction.setBankAccount(currentUser.getBankAccount());
+        transaction.setAmount(amountTransaction);
+        transaction.setReceiverBankAccount(beneficiaryUser.getBankAccount());
+        transaction.setDescription(performTransactionDto.getDescription());
+        transaction.setBeneficiaryUsername(beneficiaryUser.getUsername());
+        transactionRepository.save(transaction);
 
     }
 
